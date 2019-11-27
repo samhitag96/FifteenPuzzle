@@ -1,0 +1,16 @@
+.main{
+    margin:auto;
+    height: 400px;
+    width: 400px;   
+    display: flex; 
+    flex-wrap: wrap;
+}
+
+.game-piece{
+    border: 2px solid black;
+    height: 96px;
+    line-height: 96px;
+    text-align: center;
+    vertical-align: middle;
+    width: 96px;
+}
