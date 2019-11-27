@@ -3,13 +3,30 @@
         <title>
             Fifteen Puzzle
         </title>
-
+        <style>
+            *{
+                box-sizing: border-box;
+            }
+            .main{
+                margin:auto;
+                height: 400px;
+                width: 400px;   
+                display: flex; 
+                flex-wrap: wrap;
+            }
+            .game-piece{
+                text-align: center;
+                vertical-align: middle;
+            }
+            img{
+                border: 2px solid black;
+                height: 100px;
+                width: 100px;
+            }
+        </style>
     </head>
     <body>
         <div class = "main">
-            <div class = "game-piece">
-                    <img class = "front-face"  src = "star1.jpg"/>
-            </div>
             <div class = "game-piece">
                     <img class = "front-face"  src = "star1.jpg"/>
             </div>
@@ -56,8 +73,10 @@
                     <img class = "front-face"  src = "star16.jpg"/>
             </div>
         </div>
+        <bottom class = "puzzleStart">
+        <script>
 
 
-
+        </script>
     </body>
 </html>
