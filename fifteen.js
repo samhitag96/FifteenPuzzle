@@ -5,7 +5,7 @@ var main = document.getElementById('main');
 
 var find;
 var piece;
-
+var comp;
 var im = ["url(\"./star1.jpg\")",
 "url(\"star2.jpg\")",
 "url(\"./star3.jpg\")",
@@ -31,7 +31,7 @@ function startPuzzle(){
    // var main = document.getElementById('main');
    // piece = main.getElemenstByTagName('div');
     
-    for (var i=0; i<piece.length; i++){ //run through all 15 pieces of the board
+    for (var i=0; i<piece.length-1; i++){ //run through all 15 pieces of the board
         piece[i].className = 'part'; 
         piece[i].style.left = (i%4*100)+'px';
         piece[i].style.top = ( parseInt((i/4)*100))+'px';
@@ -41,13 +41,32 @@ function startPuzzle(){
         piece[i].style.width = "100px";
         //piece[i].style.backgroundImage = "url(\"./star.jpg\")";
         piece[i].style.backgroundImage = im[i];
-   
+        
+        
+        piece[i].onclick = function(){
+            if(moveable(piece[i])){
+                console.log("clicked thing has empty");
+            }
+        }
+        
     }
+    
+
+    piece[15].className = 'empty';
+    piece[15].style.border = "2px solid red";
+    piece[15].style.height = "100px";
+    piece[15].style.width = "100px";
+    piece[15].style.top = 375+'px';
+    piece[15].style.left = 300+'px';
+
     //shuffledPieces = shuffle(shuffledPieces);
     //shuffleParts();
     
     //var list = document.querySelector('div'), i;
-    
+    for(var i = 0; i<piece.length;i++){
+        console.log(piece[i]);
+        
+    }//piece[i].onclick = swap(piece[i]);
     //shuffleParts();
   // shuffleParts();
 }
@@ -63,8 +82,46 @@ function shuffleParts(){
     }
     
 }
-function moveable(){
+function swap(part){
+    moveable(part);
+   /* if(moveable(part)){
+        console.log("can be swapped!");
+    }*/
+}
+function moveable(part){
+    //locations to compare
+    var up = (parseInt(part.style.top))-100;
+    var down=(parseInt(part.style.top))+100;
+    var left = (parseInt(part.style.left))-100;
+    var right = (parseInt(part.style.left))+100;
 
+    comp = document.getElementsByClassName('empty');
+
+    comp.style.border = "2px solid green";
+    
+console.log(" ");
+    console.log("values of up: " + up + " down: " + down + " left: " + left + " right: " + right);
+    console.log(" ");
+    return true;
+    //return true;
+   /*if( (parseInt(comp.style.top)) == up){ //check up
+        console.log("checked top piece");
+        return true;
+   } 
+   else if( (parseInt(comp.style.top)) == down){ //down
+    console.log("checked down piece");
+        return true;
+   }
+   else if((parseInt(comp.style.left)) == left){ //check left
+    console.log("checked left piece");
+        return true;
+   }else if((parseInt(comp.style.left)) == right){ //chck right
+    console.log("checked right piece");
+        return true;
+   }
+   else{ //no moveable available
+       return false;
+   }*/
 }
 function getRandomInt(min, max) {
     min = Math.ceil(min);
