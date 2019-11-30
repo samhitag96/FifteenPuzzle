@@ -31,12 +31,14 @@ function startPuzzle(){
     
    // var main = document.getElementById('main');
    // piece = main.getElemenstByTagName('div');
-    piece[15].className = 'empty';
+     piece[15].className = 'empty';
     piece[15].style.border = "2px solid red";
     piece[15].style.height = "100px";
     piece[15].style.width = "100px";
-    piece[15].style.top = 375+'px';
-    piece[15].style.left = 300+'px';
+    piece[15].style.top = 375+"px";
+    piece[15].style.left = 300+"px";
+
+    
 
     for (var i=0; i<piece.length-1; i++){ //run through all 15 pieces of the board
         piece[i].className = 'part'; 
@@ -48,10 +50,10 @@ function startPuzzle(){
         piece[i].style.width = "100px";
         //piece[i].style.backgroundImage = "url(\"./star.jpg\")";
         piece[i].style.backgroundImage = im[i];
-        
-        
-       
     }
+
+    
+    
     //shuffledPieces = shuffle(shuffledPieces);
     //shuffleParts();
     
@@ -66,7 +68,7 @@ function startPuzzle(){
         }*/
 
         console.log(parseInt(piece[i].style.top));
-
+    
         piece[i].onclick = function(){
             //console.log("CLICKED " + this.style.top);
             swap(this);
@@ -84,6 +86,7 @@ function shuffleParts(){
     console.log("SHUFFLING...");
     console.log(" ");
     piece = shuffle(piece);
+    
 
     startPuzzle();
     for(var i = 0; i<piece.length;i++){
@@ -124,6 +127,7 @@ function moveable(part){
 
    
     console.log("empty's top/bottom val: " + parseInt(emptyY) + " left/right val: " + parseInt(emptyX));
+    
   if( (parseInt(emptyY)) == up){ //check up
         console.log("checked top piece");
         return true;
@@ -159,16 +163,26 @@ function shuffle(array) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
       
+      console.log("this is current index" + " " + currentIndex);
+      console.log("this is random index" + " " + randomIndex);
+      console.log("this is top of current Index" + "" + piece[currentIndex].style.top);
       
+      if(piece[randomIndex].style.top = emptyY){
+            piece[randomIndex].style.backgroundImage = null;   
+      }
+      
+   
       // And swap it with the current element.
       
       temporaryValue = array[currentIndex];
+     
+    
 
       var currentImg = array[currentIndex].backgroundImage;
       var currentX = array[currentIndex].style.left;
       var currentY = array[currentIndex].style.top;
       var currentBG = array[currentIndex].style.backgroundPosition;
-
+    
       //console.log(" ");
        //console.log("current index position" + currentX + " " + currentY);
        // console.log("current inner HTML = " + currentImg);
@@ -190,7 +204,7 @@ function shuffle(array) {
        //console.log("Random index position" +  randX + " " + randY);
      //  console.log("random new inner HTML = " + randImg);
      // console.log(" ");
-
+     
       array[currentIndex].style.left = randX;
       array[currentIndex].style.top = randY;
       array[currentIndex].style.backgroundPosition = randBG; 
@@ -207,7 +221,8 @@ function shuffle(array) {
       array[randomIndex].style.top = tempY;
       array[randomIndex].style.backgroundPosition = tempBG; 
       array[randomIndex].backgroundImage = tempImg;
-
+     
+      
     }
    // for(var i = 0; i<array.length; i++){
         //console.log(array[i].innerHTML);
