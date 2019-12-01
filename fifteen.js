@@ -1,232 +1,270 @@
-var piece = Array.prototype.slice.call(document.querySelectorAll('.game-piece')); //returns a NodeList, index starts at 0
-var shuffledPieces = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+var piece; 
+var notify;
+var timer;
+var emptyY;
+var emptyX;
+var mario = document.getElementById("myAudio");
+var bg = false;
+var y = document.getElementById("winnerAudio");
+function playAudio(){
+    mario.play();
+}
+function win()
+{ 
+    mario.pause();
+    y.play();
+    document.getElementById("winner").src ="win.gif";
+}
+window.onload = function(){
+    var puzzleArea = document.getElementById('main');
+    piece = puzzleArea.getElementsByTagName('div');
+    for (var i=0; i<piece.length; i++)
+	{
+	 piece[i].className = 'piece';
 
-var main = document.getElementById('main');
+	 piece[i].style.left = (i%4*100)+'px'; 
+	 piece[i].style.top = (parseInt(i/4)*100) + 'px'; 
 
-var find;
-var piece;
-var emptyX = '300px';
-var emptyY = '375px';
-var im = ["url(\"./star1.jpg\")",
-"url(\"star2.jpg\")",
-"url(\"./star3.jpg\")",
-"url(\"./star4.jpg\")",
-"url(\"./star5.jpg\")",
-"url(\"./star6.jpg\")",
-"url(\"./star7.jpg\")",
-"url(\"./star8.jpg\")",
-"url(\"./star9.jpg\")",
-"url(\"./star10.jpg\")",
-"url(\"./star11.jpg\")",
-"url(\"./star12.jpg\")",
-"url(\"./star13.jpg\")",
-"url(\"./star14.jpg\")",
-"url(\"./star15.jpg\")"];
-
-
-function startPuzzle(){
-
-    console.log("Button Clicked");
-    //console.log(shuffledPieces.length);
-    
-   // var main = document.getElementById('main');
-   // piece = main.getElemenstByTagName('div');
-     piece[15].className = 'empty';
-    piece[15].style.border = "2px solid red";
-    piece[15].style.height = "100px";
-    piece[15].style.width = "100px";
-    piece[15].style.top = 375+"px";
-    piece[15].style.left = 300+"px";
-
-    
-
-    for (var i=0; i<piece.length-1; i++){ //run through all 15 pieces of the board
-        piece[i].className = 'part'; 
-        piece[i].style.left = (i%4*100)+'px';
-        piece[i].style.top = ( parseInt((i/4)*100))+'px';
-       // piece[i].style.backgroundPosition = '-'+ piece[i].style.left + ' ' + '-'+piece[i].style.top;
-        piece[i].style.border = "2px solid black";
-        piece[i].style.height = "100px";
-        piece[i].style.width = "100px";
-        //piece[i].style.backgroundImage = "url(\"./star.jpg\")";
-        piece[i].style.backgroundImage = im[i];
+	 piece[i].style.backgroundPosition= '-' + piece[i].style.left + ' ' + '-' + piece[i].style.top; 
+		
+	 piece[i].onclick = function() 
+		{
+			if (checkMove(parseInt(this.innerHTML))) 
+			{
+				swap(this.innerHTML-1); 
+				if (finish()) 
+				{
+					win(); 
+				}
+				return;
+			}
+		};
     }
-
     
-    
-    //shuffledPieces = shuffle(shuffledPieces);
-    //shuffleParts();
-    
-    //var list = document.querySelector('div'), i;
-    for(var i = 0; i<piece.length;i++){
-       // console.log(piece[i]);
-      /* piece[i].onclick = function(){
-        pieceY = piece[i].style.top;
-        pieceX = piece[i].style.left;
-        if(moveable(pieceX, pieceY)){
-            console.log("clicked thing has empty");
-        }*/
-
-        console.log(parseInt(piece[i].style.top));
-    
-        piece[i].onclick = function(){
-            //console.log("CLICKED " + this.style.top);
-            swap(this);
+    var change = document.getElementById('changeBG');
+    change.onclick = function(){
+        bg = !bg;
+        for(var i=0; i<piece.length; i++){
+            if(bg){
+                piece[i].style.backgroundImage = "url('super-mario.jpg')";
+            }else{
+                piece[i].style.backgroundImage = "url('star.jpg')";
+            }
+            
         }
-    }
-
-
+       
+    };
+	var shuffle = document.getElementById('shufflebutton'); 
+	emptyX = '300px'; 
+    emptyY = '300px';
+    
+	shuffle.onclick = function() 
+	{
         
-    //piece[i].onclick = swap(piece[i]);
-    //shuffleParts();
-  // shuffleParts();
-}
-function shuffleParts(){
-    console.log(" ");
-    console.log("SHUFFLING...");
-    console.log(" ");
-    piece = shuffle(piece);
-    
 
-    startPuzzle();
-    for(var i = 0; i<piece.length;i++){
-        console.log(piece[i]);
-    }
+        playAudio();
+        for (var i=0; i<300; i++) 
+		{
+            var rand = parseInt(Math.random()* 100)%4; 
+            var holdX = parseInt(emptyX);
+            var holdY= parseInt(emptyY);
+           
+            var goup =holdY > 0;
+            var godown = holdY < 300;
+            var goleft = holdX > 0;
+            var goright = holdX <300; 
+            //console.log(emptyY + " and " + emptyX);
+			if (rand == 0)
+			{
+                var temp = moveable(holdY,holdX,  100, 0, goup); 
+                //x++;
+                console.log(temp);
+				if ( temp != -1)
+				{
+					swap(temp);
+				}
+			}
+			if (rand == 1)
+			{
+                var temp = moveable(holdY,holdX, -100,0, godown);
+                //x++;
+                console.log(temp);
+				if ( temp != -1) 
+				{
+					swap(temp);
+				}
+			}
+			if (rand == 2)
+			{
+                var temp = moveable(holdY,holdX, 0,100, goleft);
+                //x++;
+                console.log(temp);
+				if ( temp != -1)
+				{
+					swap(temp);
+				}
+			}
+			if (rand == 3)
+			{
+                var temp = moveable(holdY,holdX, 0, -100, goright);
+                //x++;
+                console.log(temp);
+				if (temp != -1)
+				{
+					swap(temp);
+				}
+			}
+        }
+		      
+
+    };
+
+    var cheat = document.getElementById('cheatbutton');
+    cheat.onclick = function(){
+
+        var resetArea = document.getElementById('main');
+        place = resetArea.getElementsByTagName('div');
+        for (var i=0; i<place.length; i++) 
     
+        {
+    
+            place[i].className = 'place'; 
+    
+            place[i].style.left = (i%4*100)+'px'; 
+    
+            place[i].style.top = (parseInt(i/4)*100) + 'px'; 
+    
+            place[i].style.backgroundPosition= '-' + place[i].style.left + ' ' + '-' + place[i].style.top; 
+        }
+        win(); 
+
+    };
+};
+function checkMove(coordinate) 
+{
+    coordinate = coordinate-1;
+    var up = (parseInt(piece[coordinate].style.top))+100;
+    var down= (parseInt(piece[coordinate].style.top))-100;
+    var left = (parseInt(piece[coordinate].style.left))+100;
+    var right = (parseInt(piece[coordinate].style.left))-100;
+    
+    
+    var pieceX = parseInt(piece[coordinate].style.left);
+    var pieceY =  parseInt(piece[coordinate].style.top);
+    var holdX = parseInt(emptyX);
+            var holdY= parseInt(emptyY);
+            var goup =holdY > 0;
+            var godown = holdY < 300;
+            var goleft = holdX > 0;
+            var goright = holdX <300; 
+    
+        if((moveable(up, pieceX, 100, 0, goup))==(coordinate)){
+            console.log("hit, empty will be moving up");
+            //x--;
+            return true;
+        }
+        if((moveable( down,  pieceX, -100,0, godown ))==(coordinate)){
+            console.log("hit, empty will be moving down");
+            //x--;
+            return true;
+        }
+        if((moveable(pieceY, left, 0,100, goleft))==(coordinate)){
+            console.log("hit, empty will be moving left");
+            //x--;
+            return true;
+        }
+        if((moveable( pieceY, right,0, -100, goright))==(coordinate)){
+            console.log("hit, empty will be moving right");
+            //x--;
+            return true;
+        }
+    console.log(coordinate);
+    console.log("in moveable compare to" + piece[coordinate].style.left + " and " + piece[coordinate].style.top);
+    console.log("in moveable empty " + emptyX + " and " + emptyY);
+
+
 }
-function swap(part){
-    if(moveable(part)){
+function moveable(spaceToCheckY, spaceToCheckX, adjY, adjX, cond){
+    var checkX = parseInt(emptyX);
+    var checkY = parseInt(emptyY);
+
+    console.log("in moveable empty " + checkX + " and " + checkY);
+
+    //console.log("piece location is Y " + spaceToCheckY + " and X " + spaceToCheckX );
+     //console.log("in moveable " + checkX + " and " + checkY + " and " + spaceToCheckX + " and " + spaceToCheckY);
+
+    
+    if( (spaceToCheckY == checkY) && (spaceToCheckX == checkX) ){ 
+        console.log("there was a match for the empty!");
+        console.log("condition needs to be " + parseInt(cond) + " and the empty is " + checkX + " and " +checkY);
+        if(cond){
+
+            console.log("condition passed go " + cond);
+            for(var i =0; i<piece.length; i++){
+                // console.log(" "); 
+                // console.log("give back " + i);
+                 //console.log("piece Y at "+ i + " is " +piece[i].style.top + " X " + piece[i].style.left);
+                 var compX = parseInt(piece[i].style.left);
+                 var compY = parseInt(piece[i].style.top); 
+                 console.log("in moveable compare to" + piece[i].style.left + " and " + piece[i].style.top);
+                 console.log("in moveable empty " + checkX + " and " + checkY);
+                 if((( compY+adjY)==checkY) && ((compX+adjX)==checkX)){
+                     x =  parseInt(piece[i].innerHTML);
+                     x--;
+                     console.log("returning " + x);
+                     return (x);
+                 }
+             }
+
+             console.log("in moveable empty " + compX + " and " + compY);
+        }else{
+            console.log("problematic");
+            return -1;
+        }
         
     }
-
-
-
-   /* if(moveable(part)){
-        console.log("can be swapped!");
-    }*/
-}
-function moveable(part){
-    //locations to compare
-    //var toSubY = part.style.top;
-    //var toSubX = part.style.left;
-    var up = (parseInt(part.style.top))-100;
-    var down=(parseInt(part.style.top))+100;
-    var left = (parseInt(part.style.left))-100;
-    var right = (parseInt(part.style.left))+100;
-
-    
-    //comp.style.border = "2px solid green";
-    
-    console.log(" ");
-    console.log("values of up: " + up + " down: " + down + " left: " + left + " right: " + right);
-    console.log(" ");
-
-    //console.log("top " + toSubY + " left/right: " + toSubX);
-    //return true;
-    //return true;
-
-   
-    console.log("empty's top/bottom val: " + parseInt(emptyY) + " left/right val: " + parseInt(emptyX));
-    
-  if( (parseInt(emptyY)) == up){ //check up
-        console.log("checked top piece");
-        return true;
-   } 
-   else if( (parseInt(emptyY)) == down){ //down
-    console.log("checked down piece");
-        return true;
-   }
-   else if((parseInt(emptyX)) == left){ //check left
-    console.log("checked left piece");
-        return true;
-   }else if((parseInt(emptyX)) == right){ //chck right
-    console.log("checked right piece");
-        return true;
-   }
-   else{ //no moveable available
-       return false;
-   }
-}
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
 }
 
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+function swap (coordinate)
+{
+    //console.log("given coor" + coordinate);
+	var temp = piece[coordinate].style.top;
+    piece[coordinate].style.top = emptyY;
+	emptyY = temp;
+	temp = piece[coordinate].style.left;
+    piece[coordinate].style.left = emptyX;
+    emptyX = temp;
     
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      
-      console.log("this is current index" + " " + currentIndex);
-      console.log("this is random index" + " " + randomIndex);
-      console.log("this is top of current Index" + "" + piece[currentIndex].style.top);
-      
-      if(piece[randomIndex].style.top = emptyY){
-            piece[randomIndex].style.backgroundImage = null;   
-      }
-      
-   
-      // And swap it with the current element.
-      
-      temporaryValue = array[currentIndex];
-     
-    
+}
+function finish() 
 
-      var currentImg = array[currentIndex].backgroundImage;
-      var currentX = array[currentIndex].style.left;
-      var currentY = array[currentIndex].style.top;
-      var currentBG = array[currentIndex].style.backgroundPosition;
-    
-      //console.log(" ");
-       //console.log("current index position" + currentX + " " + currentY);
-       // console.log("current inner HTML = " + currentImg);
-       //console.log(" ");
-     
-      temporaryValue.style.left = currentX;
-      temporaryValue.style.top = currentY;
-      temporaryValue.style.backgroundPosition = currentBG;
-      temporaryValue.backgroundImage = currentImg;
-      
-      array[currentIndex] = array[randomIndex];
+{
 
-      var randImg = array[randomIndex].backgroundImage;
-      var randX = array[randomIndex].style.left;
-      var randY = array[randomIndex].style.left;
-      var randBG = array[randomIndex].style.backgroundPosition;
+	var flag = true;
 
-      //console.log(" ");
-       //console.log("Random index position" +  randX + " " + randY);
-     //  console.log("random new inner HTML = " + randImg);
-     // console.log(" ");
-     
-      array[currentIndex].style.left = randX;
-      array[currentIndex].style.top = randY;
-      array[currentIndex].style.backgroundPosition = randBG; 
-      array[currentIndex].backgroundImage = randImg;
+	for (var i = 0; i < piece.length; i++) 
+	{
 
-      array[randomIndex] = temporaryValue;
+		var top = parseInt(piece[i].style.top);
 
-      var tempImg = temporaryValue.backgroundImage;
-      var tempX = temporaryValue.style.left;
-      var tempY = temporaryValue.style.top;
-      var tempBG = temporaryValue.style.backgroundPosition;
-      
-      array[randomIndex].style.left = tempX;
-      array[randomIndex].style.top = tempY;
-      array[randomIndex].style.backgroundPosition = tempBG; 
-      array[randomIndex].backgroundImage = tempImg;
-     
-      
-    }
-   // for(var i = 0; i<array.length; i++){
-        //console.log(array[i].innerHTML);
-    //}
-  
-    return array;
-  }
+		var left = parseInt(piece[i].style.left);
+
+
+		if (left != (i%4*100) || top != parseInt(i/4)*100) 
+
+		{
+
+			flag = false;
+
+			break;
+
+		}
+
+	}
+
+	return flag;
+
+}
+
+
+

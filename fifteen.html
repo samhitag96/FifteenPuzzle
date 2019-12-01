@@ -7,31 +7,55 @@
             *{
                 box-sizing: border-box;
             }
-            #main{
-                margin:auto;
-                height: 400px;
-                width: 400px;   
-                display: flex; 
-                flex-wrap: wrap;
+            body {
+                background-color: white;
+                font-family: sans-serif;
                 
             }
-            .game-piece{
+
+            #controls,
+            #area,
+            #main{
+                width: 400px;
+            }
+
+            #controls {
+                padding-top: 10px;
+                text-align: center;
+            }
+
+
+            /* Used to center the puzzle. */
+            #area {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            /* The area that holds the 15 puzzle pieces. */
+            #main {
+                font-size: 32px;
+                height: 400px;
+                padding: 0px;
+                position: relative;
+            }
+
+            /* This class should be applied to each of the 15 puzzle pieces. */
+            .piece, .place {
+                background-image: url(star.jpg);
+                border: 2px solid black;
+                height: 100px;
+                line-height: 100px;
+                position: absolute;
                 text-align: center;
                 vertical-align: middle;
-                padding: auto;
-                border: 2px solid black;
-                height: 100px;
                 width: 100px;
             }
-        /*  img{
-                border: 2px solid black;
-                height: 100px;
-                width: 100px;
-            }*/
-            .numbers{
-                    font-size: 32px;
-                   
-                    
+
+            /* This class should be applied to a puzzle piece that can be moved. */
+            .movablepiece:hover {
+                border-color: red;
+                color: #006600;
+                text-decoration: underline;
             }
             .empty{
                 border: 2px solid red;
@@ -40,66 +64,42 @@
                 height: 100px;
                 width: 100px;
             }
+            #winner{
+                margin-left: auto;
+                margin-right: auto;
+            }
             
         </style>
     </head>
     <body>
-        <div id = "main">
-            <div class = "game-piece">
-                1
-            </div>
-            <div class = "game-piece">
-                  2
-            </div>
-            <div class = "game-piece">
-                  3
-            </div>
-            <div class = "game-piece">
-               4
-            </div>
-            <div class = "game-piece">
-                 5
-            </div>
-                        
-            <div class = "game-piece">
-              6
-            </div>
-            <div class = "game-piece">
-                 7
-            </div>
-            <div class = "game-piece">
-                 8
-            </div>
-            <div class = "game-piece">
-                9
-            </div>
-            <div class = "game-piece">
-                10
-            </div>
-            <div class = "game-piece">
-                11
-            </div>
-            <div class = "game-piece">
-                 12
-            </div>
-            <div class = "game-piece">
-                13
-            </div>
-            <div class = "game-piece">
-                  14
-            </div>
-            <div class = "game-piece">
-                 15
-            </div>
-        <!-- --> 
-            <div class = "game-piece">
-                   
-            </div>
-        </div>
+            <audio id = "myAudio">
+                    <!-- <source src ="mario.ogg" type="audio/ogg"> -->
+                     <source src ="mario.mp3">
+             </audio>    
+            <img id = "winner" src="./blank.png" width="107" height="98">
+            <audio id = "winnerAudio">
+                     <!-- <source src ="mario.ogg" type="audio/ogg"> -->
+                      <source src ="star.mp3">
+              </audio>   
+        <div id="area">
+			<div id="main">
+				<!-- the following are the fifteen puzzle pieces -->
+				<div>1</div>  <div>2</div>  <div>3</div>  <div>4</div>
+				<div>5</div>  <div>6</div>  <div>7</div>  <div>8</div>
+				<div>9</div>  <div>10</div> <div>11</div> <div>12</div>
+				<div>13</div> <div>14</div> <div>15</div>
+			</div>
 
-        <input type = "button" id = "startPuzzle" value = "Load puzzle" onClick = "startPuzzle();"/>
-        <input type = "button" id = "shufflePuzzle" value = "Shuffle!" onClick = "shuffleParts();"/>
-        <script src = "fifteen.js">
+			<div id="controls">
+            <button id="shufflebutton">Shuffle</button>
+            <button id="cheatbutton">Cheat!</button>
+            <button id="changeBG">Change image!!</button>
+			</div>
+		</div>
+
+
+        
+        <script src = "fifteen.js"></script>
         
 
         </script>
