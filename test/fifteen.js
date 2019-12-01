@@ -1,111 +1,265 @@
-const piece = document.querySelectorAll('.game-piece'); //returns a NodeList, index starts at 0
-var shuffledPieces = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+var piece; 
+var notify;
+var timer;
+var emptyY;
+var emptyX;
+
+window.onload = function(){
+    var puzzleArea = document.getElementById('main');
+    piece = puzzleArea.getElementsByTagName('div');
+    for (var i=0; i<piece.length; i++) //applies features to each puzzle piece 
+
+	{
+
+	 piece[i].className = 'puzzlepiece'; //setting up the puzzle piece code
+
+	 piece[i].style.left = (i%4*100)+'px'; //calculates the position for puzzle pieces from the left of the screen
+
+	 piece[i].style.top = (parseInt(i/4)*100) + 'px'; //calculates the position for puzzle pieces from the top of the screen
+
+	 piece[i].style.backgroundPosition= '-' + piece[i].style.left + ' ' + '-' + piece[i].style.top; 
+		//calculates the position of the background picture so in moves in relation to the puzzle pieces
 
 
-var find;
-function startPuzzle(){
+	/* piece[i].onmouseover = function() //aplies features when mouse moves over puzzle pieces
 
-    console.log("Button Clicked");
-    //console.log(shuffledPieces.length);
-    
-    
-    
-    for (var i=0; i<piece.length; i++){ //run through all 15 pieces of the board
-        piece[i].className = 'part'; 
-        piece[i].style.left = (i%4*100)+'px';
-        piece[i].style.top = ( parseInt((i/4)*100))+'px';
-        piece[i].style.backgroundPosition = '-'+ piece[i].style.left + ' ' + '-'+piece[i].style.top;
-        //var shuf = getRandomInt(1,16);
-       // console.log(shuf);
-        console.log(piece[i]);
-        //var num = (Math.random()*100)%4;
-        //console.log(num);
-        //var test = parseInt('300 px');
-        //console.log(test);
-       // var numWInt = parseInt(num);
+		{
+			if (checkMove(parseInt(this.innerHTML))) //checks whenever a move is made
 
-        //console.log(numWInt);
-        //shuffleParts();
-        //piece[i].onclick = moveable(this.innerHTML);
-    }
-    //shuffledPieces = shuffle(shuffledPieces);
-    console.log(" ");
-    console.log("SHUFFLING...");
-    console.log(" ");
-    shuffledPieces = shuffle(piece);
-    
-    shuffleParts();
-}
-function shuffleParts(){
-    //X = '300px';
-    //Y = '300px';
-    //for(var i = 0; i<; i++){
+			{
 
-    //}
-    //var shuf = getRandomInt(1,16);
-    //var temp = shuf;
-   /* shuffledPieces[0]=shuf;
+				/*this.style.border = "3px solid red"; //changes to red when a puzzle piece is near an empty empty
 
-    console.log("first entered " + shuffledPieces[0]);
-    for(var i = 1; i<shuffledPieces.length;i++){
-        shuf = getRandomInt(1,16); //get a new random number
-        console.log("new " + (i+1) +" shuffle after entering for loop is " + shuf);
-        temp = shuf;
-        find = 1;
-        do{
+				this.style.color = "#006600"; //text color changes to green when a puzzle piece is near an empty empty
 
-            shuffledPieces.find(function(element){ //check the array to see if the newly shfufled element is already in the array
-                if(element == temp){ //if any elements == shuf, shuffle again
-                    console.log("element match found in array, shuffling for new one, staying in the while...");
-                    
-                        temp = getRandomInt(1,16); 
-        
-                        console.log("new next shuffle is : " + temp);
-                    
-                    find = 1;
-                    
-                }else if(element!=temp){ //if the newly shuffled doesn't match any elements, exit loop with condition
-                    shuf = temp;
-                    console.log("found a new, unmatched number which is " + shuf + "! Exiting while!")
-                    find = -1;
-                };
+                this.style.textDecoration = "underline"; //underlines the number of the puzzle piece piece
                 
-            });
-            
-        }while(find != -1);
 
-        shuffledPieces[i]=shuf;
-    }*/
+                this.style.backgroundImage="url('star.jpg')"; 
+                //sets the image for the puzzle's background 
+
+			}
+
+		};*/
 
 
-    for(var i = 0; i<shuffledPieces.length;i++){
-        console.log(shuffledPieces[i]);
-    }
-    
+	/* piece[i].onmouseout = function() //activates whenever mouse moves out of puzzle piece
+
+		{
+
+			this.style.border = "2px solid black"; //reverts to its original size border 
+
+			this.style.color = "#000000"; //reverts to original text color
+
+			this.style.textDecoration = "none"; //reverts to original text state
+
+		};*/
+
+
+
+	 piece[i].onclick = function() //activates when mouse clicks on a puzzle piece
+		{
+			if (checkMove(parseInt(this.innerHTML))) //checks whether or not the puzzle piece can move into an empty empty
+			{
+				swap(this.innerHTML-1); //moves into an empty empty if true
+				if (finish()) //checks when the all the 15 pieces are in its right empty
+				{
+					//win(); //alerts the player that they have won the game
+				}
+				return;
+			}
+		};
+	}
+	var shuffle = document.getElementById('shufflebutton'); //initializes the shuffle button
+	emptyX = '300px'; 
+	emptyY = '300px';
+	shuffle.onclick = function() //activates whenever the shuffle button is clicked
+	{
+		for (var i=0; i<300; i++) 
+		{
+			var rand = parseInt(Math.random()* 100) %4; //generates a random number for shuffling each piece
+			if (rand == 0)
+			{
+				var temp = up(emptyX, emptyY); 
+				if ( temp != -1)
+				{
+					swap(temp);
+				}
+			}
+			if (rand == 1)
+			{
+				var temp = down(emptyX, emptyY);
+				if ( temp != -1) 
+				{
+					swap(temp);
+				}
+			}
+			if (rand == 2)
+			{
+				var temp = left(emptyX, emptyY);
+				if ( temp != -1)
+				{
+					swap(temp);
+				}
+			}
+			if (rand == 3)
+			{
+				var temp = right(emptyX, emptyY);
+				if (temp != -1)
+				{
+					swap(temp);
+				}
+			}
+		}
+	};
+};
+function checkMove(position) // returns true whenever a piece can be moved into an empty empty
+{
+	if (left(emptyX, emptyY) == (position-1))
+	{
+		return true;
+	}
+	if (down(emptyX, emptyY) == (position-1))
+	{
+		return true;
+	}
+	if (up(emptyX, emptyY) == (position-1))
+	{
+		return true;
+	}
+	if (right(emptyX, emptyY) == (position-1))
+	{
+		return true;
+	}
 }
-function moveable(){
+
+function win() //notifies user that they have won
+
+{
+
+	
 
 }
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+
+
+function finish() //checks when the game reaches its end
+
+{
+
+	var flag = true;
+
+	for (var i = 0; i < piece.length; i++) //for each puzzle piece 
+	{
+
+		var top = parseInt(piece[i].style.top);
+
+		var left = parseInt(piece[i].style.left);
+
+
+		if (left != (i%4*100) || top != parseInt(i/4)*100) //checks if each piece matches its left and top position
+
+		{
+
+			flag = false;
+
+			break;
+
+		}
+
+	}
+
+	return flag;
+
 }
-function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
-  
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-  
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-  
-    return array;
-  }
+
+
+
+function left(x, y) //calculates how far to the left a puzzlepiece should position
+
+{
+	var cordX = parseInt(x);
+	var cordY = parseInt(y);
+	if (cordX > 0)
+	{
+		for (var i = 0; i < piece.length; i++) 
+		{
+			if (parseInt(piece[i].style.left) + 100 == cordX && parseInt(piece[i].style.top) == cordY)
+			{
+				return i;
+			} 
+		}
+	}
+	else 
+	{
+		return -1;
+	}
+}
+function right (x, y) //calculates how far to the right a puzzlepiece should position
+{
+	var cordX = parseInt(x);
+	var cordY = parseInt(y);
+	if (cordX < 300)
+	{
+		for (var i =0; i<piece.length; i++){
+			if (parseInt(piece[i].style.left) - 100 == cordX && parseInt(piece[i].style.top) == cordY) 
+			{
+				return i;
+			}
+		}
+	}
+	else
+	{
+		return -1;
+	} 
+}
+
+
+
+function up(x, y) //calculates how far up a puzzlepiece should position
+{
+	var cordX = parseInt(x);
+	var cordY = parseInt(y);
+	if (cordY > 0)
+	{
+		for (var i=0; i<piece.length; i++)
+		{
+			if (parseInt(piece[i].style.top) + 100 == cordY && parseInt(piece[i].style.left) == cordX) 
+			{
+				return i;
+			}
+		} 
+	}
+	else 
+	{
+		return -1;
+	}
+}
+function down (x, y) //calculates how far down a puzzlepiece should position
+{
+	var cordX = parseInt(x);
+	var cordY = parseInt(y);
+	if (cordY < 300)
+	{
+		for (var i=0; i<piece.length; i++)
+		{
+			if (parseInt(piece[i].style.top) - 100 == cordY && parseInt(piece[i].style.left) == cordX) 
+			{
+				return i;
+			}
+		}
+	}
+	else
+	{
+		return -1;
+	} 
+}
+function swap (position) //moves the puzzle piece by switching position with an empty empty
+{
+	var temp = piece[position].style.top;
+ piece[position].style.top = emptyY;
+	emptyY = temp;
+	temp = piece[position].style.left;
+ piece[position].style.left = emptyX;
+	emptyX = temp;
+}
+
